@@ -185,23 +185,89 @@ if st.button(
 
     prediction = float(model.predict(input_data)[0])
 
-    category, meaning, color = get_aqi_info(prediction)
+    # Determine AQI category and colors
 
-    # Clean prediction result
+    if prediction <= 50:
+        category = "🟢 Good"
+        meaning = "Little or no health risk"
+        background = "#2e7d32"
+        text_color = "#ffffff"
 
-    st.metric(
-        label="Predicted AQI",
-        value=f"{prediction:.2f}"
-    )
+    elif prediction <= 100:
+        category = "🟡 Moderate"
+        meaning = "Acceptable; some sensitive people may be affected"
+        background = "#f9a825"
+        text_color = "#000000"
+
+    elif prediction <= 150:
+        category = "🟠 Unhealthy for Sensitive Groups"
+        meaning = "Sensitive groups may experience effects"
+        background = "#ef6c00"
+        text_color = "#ffffff"
+
+    elif prediction <= 200:
+        category = "🔴 Unhealthy"
+        meaning = "Everyone may begin experiencing health effects"
+        background = "#c62828"
+        text_color = "#ffffff"
+
+    elif prediction <= 300:
+        category = "🟣 Very Unhealthy"
+        meaning = "Health alert"
+        background = "#6a1b9a"
+        text_color = "#ffffff"
+
+    else:
+        category = "🟤 Hazardous"
+        meaning = "Serious health effects likely"
+        background = "#5d4037"
+        text_color = "#ffffff"
+
+    # Colored AQI prediction box
 
     st.markdown(
-        f"### {category}"
-    )
+        f"""
+        <div style="
+            background-color: {background};
+            color: {text_color};
+            padding: 24px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 25px;
+        ">
+            <div style="
+                font-size: 18px;
+                font-weight: 600;
+            ">
+                PREDICTED AIR QUALITY INDEX
+            </div>
 
-    st.info(
-        f"**Meaning:** {meaning}"
-    )
+            <div style="
+                font-size: 48px;
+                font-weight: 700;
+                margin: 8px 0;
+            ">
+                {prediction:.2f}
+            </div>
 
+            <div style="
+                font-size: 22px;
+                font-weight: 600;
+            ">
+                {category}
+            </div>
+
+            <div style="
+                font-size: 16px;
+                margin-top: 8px;
+            ">
+                {meaning}
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 # ==================================================
 # AQI REFERENCE TABLE
