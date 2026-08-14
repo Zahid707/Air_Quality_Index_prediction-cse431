@@ -185,7 +185,7 @@ if st.button(
 
     prediction = float(model.predict(input_data)[0])
 
-    # Determine AQI category and colors
+    # Determine AQI category
 
     if prediction <= 50:
         category = "🟢 Good"
@@ -223,51 +223,17 @@ if st.button(
         background = "#5d4037"
         text_color = "#ffffff"
 
-    # Colored AQI prediction box
+    # AQI result box
+    html = f"""
+<div style="background-color:{background};color:{text_color};padding:25px;border-radius:15px;text-align:center;margin:20px 0;">
+<div style="font-size:18px;font-weight:600;">PREDICTED AIR QUALITY INDEX</div>
+<div style="font-size:48px;font-weight:700;margin:10px 0;">{prediction:.2f}</div>
+<div style="font-size:22px;font-weight:600;">{category}</div>
+<div style="font-size:16px;margin-top:10px;">{meaning}</div>
+</div>
+"""
 
-    st.markdown(
-        f"""
-        <div style="
-            background-color: {background};
-            color: {text_color};
-            padding: 24px;
-            border-radius: 12px;
-            text-align: center;
-            margin-top: 20px;
-            margin-bottom: 25px;
-        ">
-            <div style="
-                font-size: 18px;
-                font-weight: 600;
-            ">
-                PREDICTED AIR QUALITY INDEX
-            </div>
-
-            <div style="
-                font-size: 48px;
-                font-weight: 700;
-                margin: 8px 0;
-            ">
-                {prediction:.2f}
-            </div>
-
-            <div style="
-                font-size: 22px;
-                font-weight: 600;
-            ">
-                {category}
-            </div>
-
-            <div style="
-                font-size: 16px;
-                margin-top: 8px;
-            ">
-                {meaning}
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    st.markdown(html, unsafe_allow_html=True)
 
 # ==================================================
 # AQI REFERENCE TABLE
